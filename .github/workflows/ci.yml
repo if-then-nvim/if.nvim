@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  format:
+    name: stylua
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install stylua
+        run: |
+          curl -fsSL -o stylua.zip \
+            https://github.com/JohnnyMorganz/StyLua/releases/latest/download/stylua-linux-x86_64.zip
+          unzip -q stylua.zip
+          chmod +x stylua
+      - name: Check formatting
+        run: ./stylua --check lua/ colors/
+
+  lint:
+    name: selene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install selene
+        run: |
+          curl -fsSL -o selene.zip \
+            https://github.com/Kampfkarren/selene/releases/latest/download/selene-light-linux.zip
+          unzip -q selene.zip
+          chmod +x selene
+      - name: Lint
+        run: ./selene lua/ colors/
+
+  load:
+    name: load (${{ matrix.neovim }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        neovim: [stable, nightly]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: ${{ matrix.neovim }}
+      - name: Load every module without a plugin manager
+        run: nvim --clean --headless -l scripts/check_load.lua

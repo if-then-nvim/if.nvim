@@ -1,0 +1,7 @@
+std = "vim"
+
+[lints]
+global_usage = "allow"
+multiple_statements = "allow"
+# lazy.nvim plugin specs are mixed tables by design: { "owner/repo", event = ... }
+mixed_table = "allow"

@@ -1,0 +1,388 @@
+*if.txt*                     A Neovim distribution with a hand-built UI layer
+
+==============================================================================
+CONTENTS                                                             *if.nvim*
+
+    1. Introduction ......................... |if-intro|
+    2. Requirements ......................... |if-requirements|
+    3. Install .............................. |if-install|
+    4. Configuration ........................ |if-config|
+       4.1 Theme ............................ |if-config-theme|
+       4.2 Style ............................ |if-config-style|
+       4.3 Language servers ................. |if-config-lsp|
+       4.4 Statusline ....................... |if-config-statusline|
+       4.5 Bufline .......................... |if-config-bufline|
+       4.6 Dashboard ........................ |if-config-dashboard|
+       4.7 Plugin specs ..................... |if-config-plugins|
+    5. Commands ............................. |if-commands|
+    6. Mappings ............................. |if-mappings|
+    7. Highlights ........................... |if-highlights|
+    8. Health ............................... |if-health|
+    9. Credits .............................. |if-credits|
+
+==============================================================================
+1. INTRODUCTION                                                     *if-intro*
+
+if.nvim is a Neovim distribution with a UI layer written from scratch: a
+statusline, a bufline, a dashboard, and a theme engine that compiles its
+highlight table to Lua bytecode and caches it, so startup does not pay for
+building the table again.
+
+The name comes from the shape of a Lua block: >
+
+    if ... then ... end
+<
+==============================================================================
+2. REQUIREMENTS                                              *if-requirements*
+
+- Neovim >= 0.11
+- A Nerd Font
+- git, make and a C compiler, for tree-sitter and LuaSnip
+
+==============================================================================
+3. INSTALL                                                        *if-install*
+
+Do not clone this repository into your config directory. Use the starter,
+which bootstraps lazy.nvim and pulls if.nvim in as a plugin: >
+
+    git clone https://github.com/if-then-nvim/if-starter ~/.config/nvim
+    nvim
+<
+Updating the distribution is then `:Lazy update`, and your own settings stay
+untouched.
+
+==============================================================================
+4. CONFIGURATION                                                   *if-config*
+
+Settings live in `lua/ifrc.lua` in your config directory. Any key you leave
+out falls back to the framework default in `lua/if/defaults.lua`. >lua
+
+    local M = {}
+
+    M.theme = {
+      palette = "if-dark",
+      transparent = true,
+    }
+
+    return M
+<
+                                                        *if-config-precedence*
+Two sources are accepted, and they do not merge:
+
+    1. `lua/ifrc.lua` in your config directory
+    2. the table passed to `require("if").setup()`, which lazy.nvim fills
+       from its `opts` field
+
+If `ifrc.lua` exists it is used and `opts` is ignored entirely. Keep your
+settings in one place; |:checkhealth| if warns when both are present.
+
+List-valued options (`statusline.order`, `dashboard.grid`) replace the
+default outright rather than merging into it.
+
+------------------------------------------------------------------------------
+4.1 THEME                                                    *if-config-theme*
+
+theme.palette                   string, default "if-dark"
+        One of `if-dark` or `if-light`. An unknown name falls back to the
+        default with a warning.
+
+theme.transparent               boolean, default true
+        Leave the editor background unset so the terminal shows through.
+
+Highlights are compiled to Lua bytecode under: >
+
+    stdpath("cache")/if.nvim/<palette>-<transparent>-<style>
+<
+The cache is rebuilt when a palette, the theme module, `ui/cmp.lua`, the
+defaults or your `ifrc.lua` change, and whenever those three settings differ
+from the ones it was built with. Force a rebuild with |:IfThemeRecompile|.
+
+The colorscheme is registered as `if`, so `:colorscheme if` works.
+
+------------------------------------------------------------------------------
+4.2 STYLE                                                    *if-config-style*
+
+style                           string, default "compact"
+        Density preset read by the statusline, the bufline and the theme.
+
+------------------------------------------------------------------------------
+4.3 LANGUAGE SERVERS                                           *if-config-lsp*
+
+A web stack is configured out of the box: `lua_ls`, `ts_ls`, `eslint`,
+`cssls`, `tailwindcss`, `vue_ls` and `yamlls`, plus `html`, `jsonls`, `taplo`,
+`biome` and `astro` on default capabilities.
+
+lsp.servers                     string[], default {}
+        Extra servers to enable with the same capabilities and on_attach as
+        the built-ins. Install the server itself with `:Mason`. >lua
+
+            M.lsp = { servers = { "gopls", "pyright" } }
+<
+lsp.semantic_tokens             boolean, default false
+        Semantic tokens repaint over the compiled theme, so they are off.
+
+lsp.inlay_hints                 boolean, default false
+        Enable inlay hints on attach for servers that provide them. Toggle
+        per session with `<leader>th`.
+
+------------------------------------------------------------------------------
+4.4 STATUSLINE                                          *if-config-statusline*
+
+statusline.enabled              boolean, default true
+
+statusline.order                string[]
+        Modules from left to right. Use `"%="` for a spacer. Available:
+        `mode`, `filetype`, `lsp`, `lsp_progress`, `git_branch`, `git_diff`,
+        `diagnostics`, `cwd`, `cursor`. >lua
+
+            M.statusline = {
+              order = { "mode", "filetype", "%=", "diagnostics", "cursor" },
+            }
+<
+------------------------------------------------------------------------------
+4.5 BUFLINE                                                *if-config-bufline*
+
+bufline.enabled                 boolean, default true
+
+bufline.align                   string, default "center"
+        One of `left`, `center` or `right`.
+
+------------------------------------------------------------------------------
+4.6 DASHBOARD                                            *if-config-dashboard*
+
+dashboard.grid                  string[][]
+        Rows of component names. A name repeated across a row spans those
+        cells. Available: `header`, `find`, `grep`, `recent`, `marks`, `new`,
+        `config`, `mason`, `lazy`, `git`, `keys`, `health`, `quit`, `footer`.
+
+dashboard.separator             string, default " "
+
+dashboard.components            table
+        Override or add a component. An `action` component takes `icon`,
+        `label`, `key`, `desc`, `group` and `action`; an `ascii` or `text`
+        component takes `content` and `hl`. >lua
+
+            M.dashboard = {
+              grid = {
+                { "header", "header" },
+                { "find", "grep" },
+                { "footer", "footer" },
+              },
+              components = {
+                header = {
+                  type = "ascii",
+                  hl = "IfDashAscii",
+                  content = function()
+                    return require("if.ui.assets.ascii.if").if_future
+                  end,
+                },
+              },
+            }
+<
+Two banners ship with the distribution: `if_logo`, the block-drawn mark used
+by the organisation, and `if_future`.
+
+                                                   *if-config-dashboard-color*
+An `ascii` component may be coloured per cell instead of taking one flat
+highlight. Two extra keys control this: >lua
+
+    header = {
+      type = "ascii",
+      color = "neovim",
+      split = { 2, 11 },
+    }
+<
+color                           string, default "solid"
+        "solid"     One highlight for the whole banner, taken from `hl`.
+        "theme"     Left stroke in the palette's `green`, right stroke in its
+                    `blue`, the middle blending between them.
+        "neovim"    The same layout in Neovim's own #57A143 and #3C92D2,
+                    fixed regardless of the active palette.
+
+split                           integer[], default { 2, 11 }
+        Column bounds separating the three strokes, as 0-based character
+        columns. Cells at or before the first belong to the left stroke,
+        cells at or after the second to the right; the rest blend across the
+        rows they occupy. Only read when `color` is not "solid".
+
+Shade cells such as `░` take the same colour as the solid cells beside them.
+The font already draws that glyph at roughly a quarter coverage, so it blends
+towards the background on its own; dimming the highlight as well would sink it
+into the background entirely.
+
+------------------------------------------------------------------------------
+4.7 PLUGIN SPECS                                       *if-config-plugins*
+
+`ifrc.lua` covers the distribution's own options. Anything belonging to a
+plugin is set where lazy.nvim expects it: a spec of your own under
+`lua/plugins/` in your config directory. Same plugin, same table — lazy merges
+the two, yours last.
+
+Specs written as `opts = function(_, opts)` receive what the distribution
+already built and edit it in place. Return nothing and the edited table is
+what the plugin sees. Keep a reference to the function you are replacing and
+fall back to it, so the override survives a change to the default: >lua
+
+    -- lua/plugins/blink.lua
+    return {
+      "saghen/blink.cmp",
+      opts = function(_, opts)
+        local comp = opts.completion.menu.draw.components.kind_icon
+        local base_text, base_hl = comp.text, comp.highlight
+
+        local function swatch(ctx)
+          if ctx.kind ~= "Color" then
+            return nil
+          end
+          local ok, hl = pcall(function()
+            return require("encre.blink").get_hl(ctx.item)
+          end)
+          return ok and hl or nil
+        end
+
+        comp.text = function(ctx)
+          return swatch(ctx) and " 󱓻 " or base_text(ctx)
+        end
+
+        comp.highlight = function(ctx)
+          return swatch(ctx) or base_hl(ctx)
+        end
+      end,
+    }
+<
+That one paints a colour swatch beside `Color` completion items and leaves
+every other kind alone. Adding a plugin is the ordinary lazy spec: >lua
+
+    -- lua/plugins/encre.lua
+    return { "if-then-nvim/encre.nvim", opts = {} }
+<
+Disabling one the distribution ships is `enabled = false`: >lua
+
+    return { "folke/noice.nvim", enabled = false }
+<
+==============================================================================
+5. COMMANDS                                                      *if-commands*
+
+                                                           *:IfThemeRecompile*
+:IfThemeRecompile       Rebuild and reload the compiled highlight cache.
+
+                                                                *:IfDashboard*
+:IfDashboard            Toggle the dashboard.
+
+                                                                   *:IfReload*
+:IfReload {module}      Clear a Lua module and everything under it from
+                        `package.loaded`, then require it again and call its
+                        `setup()` if it has one. For working on if.nvim
+                        itself.
+
+                                                                     *:Format*
+:Format                 Format the buffer, or the visual range, through
+                        conform.nvim.
+
+==============================================================================
+6. MAPPINGS                                                      *if-mappings*
+
+`<leader>` is space. Only the distribution's own mappings are listed; plugins
+add their own.
+
+Windows and buffers ~
+    <C-h> <C-j> <C-k> <C-l>     move between windows
+    <tab> / <S-tab>             next / previous buffer
+    <leader>b                   new buffer
+    <leader>x                   close buffer
+    <leader>tt <leader>tc       new / close tab
+    <leader>tn <leader>tp       next / previous tab
+
+Finding ~
+    <leader>ff                  files
+    <leader>fa                  files, including hidden and ignored
+    <leader>fo                  recent files
+    <leader>fw                  live grep
+    <leader>fs                  live grep, including hidden and ignored
+    <leader>fz                  lines in the current buffer
+    <leader>fb                  buffers
+    <leader>fh                  help pages
+    <leader>fq                  quickfix list
+    <leader>ws                  projects
+
+LSP ~
+    K                           hover
+    gd                          go to definition
+    grr                         references
+    <leader>ca                  code action
+    <leader>rr                  rename
+    <leader>lo                  document symbols
+    <leader>ds                  diagnostics to the location list
+    <leader>gn / <leader>gp     next / previous diagnostic
+    <leader>th                  toggle inlay hints
+    <leader>fm                  format
+
+Git ~
+    <leader>gg                  lazygit
+    <leader>gs                  changed files
+    <leader>gb                  branches
+    <leader>gl                  log
+    <leader>bl                  blame the current line
+    <leader>cb                  toggle inline blame
+
+Explorer and terminal ~
+    <C-n> / <leader>e           toggle the explorer
+    <A-i> <A-h> <A-v>           float / horizontal / vertical terminal
+    <C-x>                       leave terminal mode
+
+Other ~
+    <Esc>                       clear search highlight
+    <leader>/                   toggle comment
+    <leader>n                   toggle line numbers
+    <leader>fd                  toggle fold
+    <leader>ql                  open the quickfix list
+    <leader>fr                  drop the quickfix entry under the cursor
+    <leader>dn                  dismiss notifications
+
+==============================================================================
+7. HIGHLIGHTS                                                  *if-highlights*
+
+Every group the distribution defines is prefixed `If`, grouped by what it
+paints:
+
+    IfNormalMode IfInsertMode IfVisualMode ...   statusline mode indicator
+    IfLsp IfLspProgress IfLspError ...           statusline LSP section
+    IfGitIcon IfGitText IfCwdIcon ...            statusline segments
+    IfBufOn IfBufOff IfTabOn IfTabFill ...       bufline
+    IfDashAscii IfDashKey IfDashFooter ...       dashboard
+    IfExplorerNormal IfExplorerTitle ...         explorer
+
+Override them from `ifrc.lua` after the theme loads, or edit the palette
+under `lua/if/theme/palettes/`.
+
+==============================================================================
+8. HEALTH                                                          *if-health*
+
+Run |:checkhealth| if to see the Neovim version, whether 'termguicolors' is
+set, where the configuration was read from, the resolved palette, the state
+of the theme cache, and which required and optional plugins are loaded.
+
+==============================================================================
+9. CREDITS                                                        *if-credits*
+
+if.nvim owes its shape to work that came before it.
+
+NvChad                       https://github.com/NvChad
+        The architecture takes its cues from NvChad: a statusline and a
+        bufline assembled from named segments, a grid-based dashboard, and a
+        theme engine that compiles highlights to Lua bytecode and caches
+        them. The code here is written from scratch, but the design is not
+        original to it.
+
+base46                       https://github.com/NvChad/base46
+        Where the bytecode-cache approach was learnt from. base46 in turn
+        credits nullchilly and nightfox.nvim for it.
+
+Atom One Dark                https://github.com/atom/one-dark-syntax
+        The syntax colours in `if-dark` and `if-light` come from One Dark.
+        Surfaces, borders and the extra accents are this distribution's own.
+
+Neovim                       https://neovim.io
+        The dashboard logo borrows Neovim's own green and blue.
+
+vim:tw=78:ts=8:noet:ft=help:norl:

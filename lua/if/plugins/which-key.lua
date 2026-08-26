@@ -1,0 +1,51 @@
+return {
+  "folke/which-key.nvim",
+  event = "VeryLazy",
+  opts = {
+    preset = "modern",
+    delay = 400,
+    win = {
+      border = "rounded",
+      padding = { 1, 2 },
+      title = true,
+      title_pos = "center",
+      wo = {
+        winblend = 10,
+      },
+    },
+    layout = {
+      width = { min = 20, max = 50 },
+      spacing = 3,
+    },
+    icons = {
+      mappings = true,
+      breadcrumb = "»",
+      separator = "→",
+      group = "+ ",
+      colors = true,
+      keys = {
+        Up = "↑ ",
+        Down = "↓ ",
+        Left = "← ",
+        Right = "→ ",
+        C = "⌃",
+        M = "⌥",
+        S = "⇧",
+        CR = "↵ ",
+        Esc = "⎋ ",
+        BS = "⌫ ",
+        Space = "␣ ",
+        Tab = "⇥ ",
+      },
+    },
+    spec = {
+      { "<leader>f", group = "find", icon = { icon = " ", color = "cyan" } },
+      { "<leader>g", group = "git", icon = { icon = " ", color = "orange" } },
+      { "<leader>a", group = "AI / Claude", icon = { icon = " ", color = "purple" } },
+      { "<leader>d", group = "diff / diag", icon = { icon = " ", color = "red" } },
+      { "<leader>t", group = "tab / toggle", icon = { icon = " ", color = "yellow" } },
+      { "<leader>r", group = "rename/request", icon = { icon = " ", color = "green" } },
+      { "<leader>q", group = "quickfix", icon = { icon = " ", color = "grey" } },
+    },
+  },
+}
