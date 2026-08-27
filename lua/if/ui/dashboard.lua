@@ -720,6 +720,21 @@ function M.setup()
 
   local buf_name = vim.api.nvim_buf_get_name(0)
   if not vim.bo[0].modified and (buf_name == "" or vim.fn.isdirectory(buf_name) == 1) then
+    local start_win = api.nvim_get_current_win()
+    local had_cursorline = vim.wo[start_win].cursorline
+    vim.wo[start_win].cursorline = false
+
+    local function restore_cursorline()
+      if api.nvim_win_is_valid(start_win) and api.nvim_win_get_buf(start_win) ~= vim.g.ifdashboard_buf then
+        vim.wo[start_win].cursorline = had_cursorline
+      end
+    end
+
+    local function open_and_restore()
+      try_open()
+      restore_cursorline()
+    end
+
     vim.schedule(function()
       local cur_win = api.nvim_get_current_win()
       if api.nvim_win_get_config(cur_win).relative ~= "" then
@@ -735,13 +750,13 @@ function M.setup()
             group = api.nvim_create_augroup("if_dashboard_open", { clear = true }),
             once = true,
             callback = function()
-              vim.schedule(try_open)
+              vim.schedule(open_and_restore)
             end,
           })
           return
         end
       end
-      try_open()
+      open_and_restore()
     end)
   end
 end
