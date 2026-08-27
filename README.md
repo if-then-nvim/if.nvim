@@ -51,9 +51,9 @@ M.lsp = { servers = { "gopls", "pyright" } }
 return M
 ```
 
-A web stack is configured out of the box — `lua_ls`, `ts_ls`, `eslint`,
-`cssls`, `tailwindcss`, `vue_ls`, `yamlls` and more. Anything you add to
-`lsp.servers` is enabled with the same capabilities; install it with `:Mason`.
+Four servers are configured out of the box — `lua_ls`, `ts_ls`, `eslint` and
+`cssls`. Anything you add to `lsp.servers` is enabled with the same
+capabilities; install it with `:Mason`.
 
 Every option, and how to override a plugin spec the distribution ships, is in
 `:help if.nvim`. `:checkhealth if` reports where your settings were read from

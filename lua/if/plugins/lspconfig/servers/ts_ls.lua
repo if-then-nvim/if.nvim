@@ -20,16 +20,7 @@ local config = {
       vim.lsp.handlers["textDocument/publishDiagnostics"](err, params, ctx, handler_config)
     end,
   },
-  init_options = {
-    plugins = {
-      {
-        name = "@vue/typescript-plugin",
-        location = vim.fn.stdpath "data" .. "/mason/packages/vue-language-server/node_modules/@vue/typescript-plugin",
-        languages = { "javascript", "typescript", "vue" },
-      },
-    },
-  },
-  filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+  filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact" },
   settings = {
     javascript = {
       inlayHints = {

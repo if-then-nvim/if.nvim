@@ -8,10 +8,10 @@ return {
     },
     ensure_installed = {
       "lua-language-server",
-      "stylua",
-      "css-lsp",
-      "html-lsp",
       "typescript-language-server",
+      "vscode-eslint-language-server",
+      "css-lsp",
+      "stylua",
       "prettier",
     },
   },

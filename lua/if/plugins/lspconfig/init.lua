@@ -10,17 +10,6 @@ return {
         "ts_ls",
         "eslint",
         "cssls",
-        "tailwindcss",
-        "vue_ls",
-        "yamlls",
-      }
-
-      local default_servers = {
-        "html",
-        "jsonls",
-        "taplo",
-        "biome",
-        "astro",
       }
 
       default.setup_diagnostic()
@@ -30,10 +19,6 @@ return {
         if not ok then
           vim.notify(("if.nvim: failed to load LSP config %q\n%s"):format(server, err), vim.log.levels.WARN)
         end
-      end
-
-      for _, server in ipairs(default_servers) do
-        default.setup_server(server)
       end
 
       for _, server in ipairs(require("if.config").lsp.servers) do

@@ -109,9 +109,8 @@ style                           string, default "compact"
 ------------------------------------------------------------------------------
 4.3 LANGUAGE SERVERS                                           *if-config-lsp*
 
-A web stack is configured out of the box: `lua_ls`, `ts_ls`, `eslint`,
-`cssls`, `tailwindcss`, `vue_ls` and `yamlls`, plus `html`, `jsonls`, `taplo`,
-`biome` and `astro` on default capabilities.
+Four servers are configured out of the box: `lua_ls`, `ts_ls`, `eslint` and
+`cssls`. Everything else is yours to add.
 
 lsp.servers                     string[], default {}
         Extra servers to enable with the same capabilities and on_attach as
