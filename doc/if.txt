@@ -264,9 +264,9 @@ Disabling one the distribution ships is `enabled = false`: >lua
 ------------------------------------------------------------------------------
 4.8 YOUR OWN SETTINGS                                    *if-config-hooks*
 
-The distribution sets its own options, autocommands and mappings. To add or
-override any of them, give `ifrc.lua` a function of the same name. Each runs
-straight after the distribution's own, so what you set wins. >lua
+The distribution sets its own options, autocommands, mappings and highlights.
+To add or override any of them, give `ifrc.lua` a function of the same name.
+Each runs straight after the distribution's own, so what you set wins. >lua
 
     M.options = function()
       vim.opt.relativenumber = true
@@ -288,7 +288,17 @@ straight after the distribution's own, so what you set wins. >lua
       vim.keymap.set("n", "<leader>w", "<cmd>write<cr>", { desc = "Write" })
       vim.keymap.set("n", "<leader>ff", "<cmd>Files<cr>", { desc = "Mine" })
     end
+
+    M.highlights = function()
+      vim.api.nvim_set_hl(0, "MarkviewCode", { bg = "#242430" })
+      vim.api.nvim_set_hl(0, "DiffviewDiffAdd", { fg = "#98c379" })
+    end
 <
+`highlights` is the place for groups the distribution knows nothing about —
+those belonging to plugins you added yourself. It runs every time the theme
+is applied, including after |:IfThemeRecompile| and after a palette change,
+so what you set there is not lost when the compiled cache is rebuilt.
+
 These are plain functions, so anything the Neovim API allows is fair game —
 `vim.keymap.set`, `vim.opt`, `vim.api.nvim_create_autocmd`, conditionals, and
 so on. There is no table format to learn.

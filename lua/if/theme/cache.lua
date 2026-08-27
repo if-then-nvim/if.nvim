@@ -174,6 +174,7 @@ function M.load()
     return false
   end
   vim.g.colors_name = "if"
+  require("if.hook").run "highlights"
   return true
 end
 
@@ -204,6 +205,7 @@ function M.setup()
 
   if not M.load() then
     vim.g.colors_name = "if"
+    require("if.hook").run "highlights"
   end
 end
 
