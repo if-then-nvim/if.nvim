@@ -51,9 +51,9 @@ M.lsp = { servers = { "gopls", "pyright" } }
 return M
 ```
 
-Four servers are configured out of the box — `lua_ls`, `ts_ls`, `eslint` and
-`cssls`. Anything you add to `lsp.servers` is enabled with the same
-capabilities; install it with `:Mason`.
+Only `lua_ls` is configured out of the box, since every user edits Lua. Add
+your own to `lsp.servers` and they are enabled with the same capabilities and
+`on_attach`; install the server itself with `:Mason`.
 
 Every option, and how to override a plugin spec the distribution ships, is in
 `:help if.nvim`. `:checkhealth if` reports where your settings were read from

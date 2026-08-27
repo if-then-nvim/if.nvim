@@ -7,9 +7,6 @@ return {
 
       local configured_servers = {
         "lua_ls",
-        "ts_ls",
-        "eslint",
-        "cssls",
       }
 
       default.setup_diagnostic()

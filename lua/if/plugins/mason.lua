@@ -8,9 +8,6 @@ return {
     },
     ensure_installed = {
       "lua-language-server",
-      "typescript-language-server",
-      "vscode-eslint-language-server",
-      "css-lsp",
       "stylua",
       "prettier",
     },
