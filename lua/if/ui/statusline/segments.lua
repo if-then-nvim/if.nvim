@@ -1,7 +1,5 @@
 local M = {}
-local config = require "if.config"
 local mode = require "if.ui.mode"
-local is_block = config.style == "block"
 
 local function drawn_window()
   return vim.g.statusline_winid or vim.api.nvim_get_current_win()
@@ -21,16 +19,12 @@ local function render_mode(label, hl, icon)
 end
 
 function M.mode()
-  if not is_block then
-    return ""
-  end
-
   local buf = vim.api.nvim_get_current_buf()
   local filetype = vim.api.nvim_get_option_value("filetype", { buf = buf })
   local m = vim.api.nvim_get_mode().mode
 
   if not is_active_window() then
-    return "%="
+    return ""
   end
 
   local special = mode.get_special(filetype)
@@ -62,8 +56,7 @@ function M.filetype()
     ft = "%#IfFile#" .. " " .. ft
 
     if icon ~= "" then
-      local sep = is_block and "%#NonText#█" or ""
-      return sep .. icon .. ft .. " %*"
+      return icon .. ft .. " %*"
     end
   end
 
@@ -167,7 +160,7 @@ function M.cursor()
   local colmn_text = "" .. current_column
 
   local icon = "%#IfCursorIcon#" .. "  "
-  local text = "%#IfCursorText#" .. (is_block and " " or "") .. line_text .. ":" .. colmn_text
+  local text = "%#IfCursorText#" .. line_text .. ":" .. colmn_text
   return icon .. text .. " %*"
 end
 
@@ -188,7 +181,7 @@ function M.lsp()
       and client.name ~= "biome"
     then
       local lsp_icon = "%#IfLspIcon#" .. " 󰚗 "
-      local lsp_text = "%#IfLspText#" .. (is_block and " " or "") .. client.name
+      local lsp_text = "%#IfLspText#" .. client.name
 
       return lsp_icon .. lsp_text .. " %*"
     end
@@ -204,7 +197,7 @@ function M.cwd()
   if vim.o.columns <= 85 then
     return ""
   end
-  return "%#IfCwdIcon# 󰉋 %#IfCwdText#" .. (is_block and " " or "") .. name .. " %*"
+  return "%#IfCwdIcon# 󰉋 %#IfCwdText#" .. name .. " %*"
 end
 
 function M.lsp_progress()

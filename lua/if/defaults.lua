@@ -5,8 +5,6 @@ M.theme = {
   transparent = true,
 }
 
-M.style = "compact"
-
 M.lsp = {
   servers = {},
   semantic_tokens = false,
@@ -16,7 +14,6 @@ M.lsp = {
 M.statusline = {
   enabled = true,
   order = {
-    "mode",
     "filetype",
     "lsp",
     "git_branch",

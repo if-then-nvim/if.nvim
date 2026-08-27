@@ -63,13 +63,7 @@ local function check_config()
       "Available: if-dark, if-light.",
     })
   else
-    vim.health.ok(
-      ("palette %q, transparent=%s, style=%s"):format(
-        config.theme.palette,
-        tostring(config.theme.transparent),
-        tostring(config.style)
-      )
-    )
+    vim.health.ok(("palette %q, transparent=%s"):format(config.theme.palette, tostring(config.theme.transparent)))
   end
 end
 

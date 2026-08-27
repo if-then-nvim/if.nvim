@@ -8,13 +8,12 @@ CONTENTS                                                             *if.nvim*
     3. Install .............................. |if-install|
     4. Configuration ........................ |if-config|
        4.1 Theme ............................ |if-config-theme|
-       4.2 Style ............................ |if-config-style|
-       4.3 Language servers ................. |if-config-lsp|
-       4.4 Statusline ....................... |if-config-statusline|
-       4.5 Bufline .......................... |if-config-bufline|
-       4.6 Dashboard ........................ |if-config-dashboard|
-       4.7 Plugin specs ..................... |if-config-plugins|
-       4.8 Your own settings ................ |if-config-hooks|
+       4.2 Language servers ................. |if-config-lsp|
+       4.3 Statusline ....................... |if-config-statusline|
+       4.4 Bufline .......................... |if-config-bufline|
+       4.5 Dashboard ........................ |if-config-dashboard|
+       4.6 Plugin specs ..................... |if-config-plugins|
+       4.7 Your own settings ................ |if-config-hooks|
     5. Commands ............................. |if-commands|
     6. Mappings ............................. |if-mappings|
     7. Highlights ........................... |if-highlights|
@@ -92,7 +91,7 @@ theme.transparent               boolean, default true
 
 Highlights are compiled to Lua bytecode under: >
 
-    stdpath("cache")/if.nvim/<palette>-<transparent>-<style>
+    stdpath("cache")/if.nvim/<palette>-<transparent>-<logo-color>
 <
 The cache is rebuilt when a palette, the theme module, `ui/cmp.lua`, the
 defaults or your `ifrc.lua` change, and whenever those three settings differ
@@ -101,13 +100,7 @@ from the ones it was built with. Force a rebuild with |:IfThemeRecompile|.
 The colorscheme is registered as `if`, so `:colorscheme if` works.
 
 ------------------------------------------------------------------------------
-4.2 STYLE                                                    *if-config-style*
-
-style                           string, default "compact"
-        Density preset read by the statusline, the bufline and the theme.
-
-------------------------------------------------------------------------------
-4.3 LANGUAGE SERVERS                                           *if-config-lsp*
+4.2 LANGUAGE SERVERS                                           *if-config-lsp*
 
 Only `lua_ls` is configured out of the box, since every user edits Lua.
 Everything else is yours to add.
@@ -126,7 +119,7 @@ lsp.inlay_hints                 boolean, default false
         per session with `<leader>th`.
 
 ------------------------------------------------------------------------------
-4.4 STATUSLINE                                          *if-config-statusline*
+4.3 STATUSLINE                                          *if-config-statusline*
 
 statusline.enabled              boolean, default true
 
@@ -140,7 +133,7 @@ statusline.order                string[]
             }
 <
 ------------------------------------------------------------------------------
-4.5 BUFLINE                                                *if-config-bufline*
+4.4 BUFLINE                                                *if-config-bufline*
 
 bufline.enabled                 boolean, default true
 
@@ -148,7 +141,7 @@ bufline.align                   string, default "center"
         One of `left`, `center` or `right`.
 
 ------------------------------------------------------------------------------
-4.6 DASHBOARD                                            *if-config-dashboard*
+4.5 DASHBOARD                                            *if-config-dashboard*
 
 dashboard.grid                  string[][]
         Rows of component names. A name repeated across a row spans those
@@ -211,7 +204,7 @@ towards the background on its own; dimming the highlight as well would sink it
 into the background entirely.
 
 ------------------------------------------------------------------------------
-4.7 PLUGIN SPECS                                       *if-config-plugins*
+4.6 PLUGIN SPECS                                       *if-config-plugins*
 
 `ifrc.lua` covers the distribution's own options. Anything belonging to a
 plugin is set where lazy.nvim expects it: a spec of your own under
@@ -261,7 +254,7 @@ Disabling one the distribution ships is `enabled = false`: >lua
     return { "folke/noice.nvim", enabled = false }
 <
 ------------------------------------------------------------------------------
-4.8 YOUR OWN SETTINGS                                    *if-config-hooks*
+4.7 YOUR OWN SETTINGS                                    *if-config-hooks*
 
 The distribution sets its own options, autocommands, mappings and highlights.
 To add or override any of them, give `ifrc.lua` a function of the same name.

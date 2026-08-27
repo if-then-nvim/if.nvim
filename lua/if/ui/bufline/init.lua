@@ -5,7 +5,6 @@ local mode = require "if.ui.mode"
 local config = require "if.config"
 
 local align = config.bufline and config.bufline.align or "left"
-local is_block = config.style == "block"
 
 function M.generate()
   local bufs = vim.tbl_filter(api.nvim_buf_is_valid, vim.t.bufs or {})
@@ -31,11 +30,8 @@ function M.generate()
   local buffers = table.concat(buf_parts)
   local tabs = table.concat(tab_parts)
 
-  local prefix = ""
-  if not is_block then
-    local hl = mode.hl(api.nvim_get_mode().mode)
-    prefix = "%#" .. hl .. "#  "
-  end
+  local hl = mode.hl(api.nvim_get_mode().mode)
+  local prefix = "%#" .. hl .. "#  "
 
   if align == "center" then
     return prefix .. "%#IfTabFill#%=" .. buffers .. "%#IfTabFill#%=" .. tabs

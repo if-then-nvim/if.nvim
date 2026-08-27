@@ -70,7 +70,7 @@ function M.setup()
 
   vim.o.statusline = "%!v:lua.require('if.ui.statusline').generate()"
 
-  if require("if.config").style == "block" then
+  if vim.tbl_contains(config.order, "mode") then
     vim.api.nvim_create_autocmd("ModeChanged", {
       group = augroup,
       callback = function()

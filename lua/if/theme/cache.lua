@@ -21,7 +21,6 @@ local function cache_key()
   return table.concat({
     config.theme.palette,
     tostring(config.theme.transparent),
-    tostring(config.style),
     tostring(header and header.color),
   }, "-")
 end

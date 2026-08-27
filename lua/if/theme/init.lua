@@ -261,9 +261,7 @@ M.misc = {
   FloatTitle = { fg = colors.white, bg = colors.charcoal },
 }
 
-local stl_style = config.style or "compact"
-
-local stl_compact = {
+M.statusline = {
   IfNormalMode = { fg = colors.green, bold = true },
   IfVisualMode = { fg = colors.blue, bold = true },
   IfInsertMode = { fg = colors.lavender, bold = true },
@@ -308,54 +306,6 @@ local stl_compact = {
   SnacksPickerInputTitle = { fg = colors.red, bold = true },
   SnacksPickerPreviewTitle = { fg = colors.green, bold = true },
 }
-
-local stl_block = {
-  IfNormalMode = { bg = colors.green, fg = colors.black, bold = true },
-  IfVisualMode = { bg = colors.blue, fg = colors.black, bold = true },
-  IfInsertMode = { bg = colors.lavender, fg = colors.black, bold = true },
-  IfTerminalMode = { bg = colors.green, fg = colors.black, bold = true },
-  IfNTerminalMode = { bg = colors.yellow, fg = colors.black, bold = true },
-  IfReplaceMode = { bg = colors.orange, fg = colors.black, bold = true },
-  IfConfirmMode = { bg = colors.teal, fg = colors.black, bold = true },
-  IfCommandMode = { bg = colors.orange, fg = colors.black, bold = true },
-  IfSelectMode = { bg = colors.blue, fg = colors.black, bold = true },
-
-  IfTelescopeMode = { bg = colors.yellow, fg = colors.black, bold = true },
-  IfExplorerMode = { bg = colors.cyan, fg = colors.black, bold = true },
-  IfLazyGitMode = { bg = colors.cyan, fg = colors.black, bold = true },
-  IfLazyNvimMode = { bg = colors.magenta, fg = colors.black, bold = true },
-
-  IfFileIcon = { bg = colors.stl_bg, fg = colors.white },
-  IfFile = { bg = colors.stl_bg, fg = colors.white },
-
-  IfGitIcon = { fg = colors.magenta },
-  IfGitText = { fg = colors.gray },
-  IfLsp = { bg = colors.stl_bg, fg = colors.white },
-  IfLspMsg = { bg = colors.green, fg = colors.black },
-
-  IfLspIcon = { bg = colors.sapphire, fg = colors.black },
-  IfLspText = { bg = colors.stl_bg, fg = colors.white },
-  IfCwdIcon = { bg = colors.peach, fg = colors.black },
-  IfCwdText = { bg = colors.stl_bg, fg = colors.white },
-  IfCursorIcon = { bg = colors.orange, fg = colors.black },
-  IfCursorText = { bg = colors.stl_bg, fg = colors.white },
-  IfFolderIcon = { bg = colors.red, fg = colors.black },
-  IfFolderText = { bg = colors.stl_bg, fg = colors.white },
-  IfQfIcon = { bg = colors.magenta, fg = colors.black },
-  IfQfText = { bg = colors.stl_bg, fg = colors.white },
-
-  IfLspError = { fg = colors.red },
-  IfLspWarning = { fg = colors.yellow },
-  IfLspHints = { fg = colors.fuchsia },
-  IfLspInfo = { fg = colors.green },
-  IfLspProgress = { fg = colors.charcoal },
-
-  SnacksPickerTitle = { bg = colors.red, fg = colors.black, bold = true },
-  SnacksPickerInputTitle = { bg = colors.red, fg = colors.black, bold = true },
-  SnacksPickerPreviewTitle = { bg = colors.green, fg = colors.black, bold = true },
-}
-
-M.statusline = stl_style == "block" and stl_block or stl_compact
 
 M.dropbar = {
   DropBarIconKindConstant = { fg = colors.orange, bg = colors.none },
@@ -775,8 +725,7 @@ M.plugins = {
 
   LemonNormal = { bg = bg },
   LemonBorder = { fg = colors.float_border, bg = bg },
-  LemonTitle = stl_style == "block" and { bg = colors.blue, fg = colors.black, bold = true }
-    or { fg = colors.blue, bg = bg, bold = true },
+  LemonTitle = { fg = colors.blue, bg = bg, bold = true },
 
   KulalaText = { bg = colors.green, fg = colors.black },
 
