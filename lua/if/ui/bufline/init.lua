@@ -152,9 +152,13 @@ end
 function M.setup()
   local augroup = api.nvim_create_augroup("if_bufline", { clear = true })
 
-  vim.t.bufs = vim.t.bufs or vim.tbl_filter(function(b)
-    return vim.fn.buflisted(b) == 1
-  end, api.nvim_list_bufs())
+  vim.t.bufs = vim.t.bufs
+    or vim.tbl_filter(function(b)
+      if vim.fn.buflisted(b) ~= 1 then
+        return false
+      end
+      return api.nvim_buf_get_name(b) ~= "" or api.nvim_get_option_value("modified", { buf = b })
+    end, api.nvim_list_bufs())
 
   vim.o.showtabline = 2
   vim.o.tabline = "%!v:lua.require('if.ui.bufline').generate()"
@@ -191,6 +195,9 @@ function M.setup()
         return
       end
       if not api.nvim_get_option_value("buflisted", { buf = buf }) then
+        return
+      end
+      if vim.v.vim_did_enter == 0 and api.nvim_buf_get_name(buf) == "" then
         return
       end
 
