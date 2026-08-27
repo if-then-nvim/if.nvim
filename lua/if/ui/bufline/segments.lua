@@ -4,11 +4,11 @@ local api = vim.api
 local tab_icons = { "󰎤", "󰎧", "󰎪", "󰎭", "󰎱", "󰎳", "󰎶", "󰎹", "󰎼", "󰽽" }
 
 function M.hl(name)
-  return "%#Cd" .. name .. "#"
+  return "%#If" .. name .. "#"
 end
 
 function M.clickable(str, handler, arg)
-  return "%" .. (arg or "") .. "@Cd" .. handler .. "@" .. str .. "%X"
+  return "%" .. (arg or "") .. "@If" .. handler .. "@" .. str .. "%X"
 end
 
 function M.buf_name(bufnr)
@@ -29,9 +29,9 @@ function M.get_icon(name)
 end
 
 function M.merge_hl(icon_hl, buf_hl)
-  local hl_name = "Cd_" .. icon_hl .. "_" .. buf_hl
+  local hl_name = "If_" .. icon_hl .. "_" .. buf_hl
   local fg = api.nvim_get_hl(0, { name = icon_hl, link = false }).fg
-  local bg = api.nvim_get_hl(0, { name = "Cd" .. buf_hl, link = false }).bg
+  local bg = api.nvim_get_hl(0, { name = "If" .. buf_hl, link = false }).bg
   api.nvim_set_hl(0, hl_name, { fg = fg, bg = bg })
   return "%#" .. hl_name .. "#"
 end
