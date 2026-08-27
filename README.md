@@ -115,5 +115,4 @@ if.nvim owes its shape to work that came before it.
 
 ## License
 
-This is free and unencumbered software released into the public domain. See
-[LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
