@@ -375,8 +375,7 @@ NvChad                       https://github.com/NvChad
         original to it.
 
 base46                       https://github.com/NvChad/base46
-        Where the bytecode-cache approach was learnt from. base46 in turn
-        credits nullchilly and nightfox.nvim for it.
+        Where the bytecode-cache approach was learnt from.
 
 Atom One Dark                https://github.com/atom/one-dark-syntax
         The syntax colours in `if-dark` and `if-light` come from One Dark.
