@@ -1,15 +1,15 @@
 ---@type Palette
 return {
-  bg = "#f4f2f8",
-  bg2 = "#e9e6f0",
-  bg3 = "#dedae7",
-  bg_tab_off = "#e7e4ed",
-  code_block = "#e9e6f0",
+  bg = "#dbd4e9",
+  bg2 = "#d0c8de",
+  bg3 = "#c6bfd5",
+  bg_tab_off = "#cfc9db",
+  code_block = "#d0c8de",
 
   mode_fg = "#fafafa",
-  border = "#cec9d8",
-  float_border = "#9b95a8",
-  comment = "#9b95a8",
+  border = "#b6aec6",
+  float_border = "#847d93",
+  comment = "#847d93",
 
   red = "#e45649",
   orange = "#986801",
@@ -20,7 +20,7 @@ return {
   blue = "#4078f2",
   magenta = "#a626a4",
   white = "#383a42",
-  black = "#f4f2f8",
+  black = "#dbd4e9",
 
   peach = "#f07178",
   lime = "#6fbd6e",
@@ -49,7 +49,7 @@ return {
   gray = "#696c77",
   onyx = "#e0e0e3",
   grape = "#b47a3a",
-  stl_bg = "#dad6e3",
+  stl_bg = "#c2bbd1",
 
   none = "none",
 }
