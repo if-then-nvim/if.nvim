@@ -14,6 +14,7 @@ CONTENTS                                                             *if.nvim*
        4.5 Bufline .......................... |if-config-bufline|
        4.6 Dashboard ........................ |if-config-dashboard|
        4.7 Plugin specs ..................... |if-config-plugins|
+       4.8 Your own settings ................ |if-config-hooks|
     5. Commands ............................. |if-commands|
     6. Mappings ............................. |if-mappings|
     7. Highlights ........................... |if-highlights|
@@ -260,6 +261,44 @@ Disabling one the distribution ships is `enabled = false`: >lua
 
     return { "folke/noice.nvim", enabled = false }
 <
+------------------------------------------------------------------------------
+4.8 YOUR OWN SETTINGS                                    *if-config-hooks*
+
+The distribution sets its own options, autocommands and mappings. To add or
+override any of them, give `ifrc.lua` a function of the same name. Each runs
+straight after the distribution's own, so what you set wins. >lua
+
+    M.options = function()
+      vim.opt.relativenumber = true
+      vim.opt.scrolloff = 8
+    end
+
+    M.autocmds = function()
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        group = vim.api.nvim_create_augroup("my_trim", { clear = true }),
+        callback = function()
+          local pos = vim.api.nvim_win_get_cursor(0)
+          vim.cmd [[keeppatterns %s/\s\+$//e]]
+          vim.api.nvim_win_set_cursor(0, pos)
+        end,
+      })
+    end
+
+    M.mappings = function()
+      vim.keymap.set("n", "<leader>w", "<cmd>write<cr>", { desc = "Write" })
+      vim.keymap.set("n", "<leader>ff", "<cmd>Files<cr>", { desc = "Mine" })
+    end
+<
+These are plain functions, so anything the Neovim API allows is fair game —
+`vim.keymap.set`, `vim.opt`, `vim.api.nvim_create_autocmd`, conditionals, and
+so on. There is no table format to learn.
+
+Mappings run inside |vim.schedule()|, after the rest of startup, which is why
+a mapping set here replaces one of the distribution's rather than racing it.
+
+A hook that raises an error is caught and reported with |vim.notify()|; the
+rest of startup carries on.
+
 ==============================================================================
 5. COMMANDS                                                      *if-commands*
 
