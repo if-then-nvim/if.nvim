@@ -137,6 +137,20 @@ local function render_lines(comp, width)
   return { rep(" ", width) }
 end
 
+local function place_cursor(win, buf, pos)
+  if not pos or not api.nvim_win_is_valid(win) or not api.nvim_buf_is_valid(buf) then
+    return false
+  end
+  if api.nvim_win_get_buf(win) ~= buf then
+    return false
+  end
+  if pos.row < 1 or pos.row > api.nvim_buf_line_count(buf) then
+    return false
+  end
+  api.nvim_win_set_cursor(win, { pos.row, pos.col })
+  return true
+end
+
 local function resolve_regions(grid)
   local regions = {}
   local rows = #grid
@@ -453,7 +467,14 @@ local function compose(config, win_width, win_height)
     act_cur_y = act_cur_y + row_h[gr]
   end
 
-  return canvas, hl_ranges, action_cells
+  local visible = {}
+  for _, cell in ipairs(action_cells) do
+    if cell.row >= 1 and cell.row <= #canvas then
+      visible[#visible + 1] = cell
+    end
+  end
+
+  return canvas, hl_ranges, visible
 end
 
 function M.open(buf, win, action)
@@ -524,8 +545,7 @@ function M.open(buf, win, action)
           best, best_dist = pos, dist
         end
       end
-      if best then
-        api.nvim_win_set_cursor(win, { best.row, best.col })
+      if place_cursor(win, buf, best) then
         apply_focus(best)
       end
     end
@@ -582,8 +602,7 @@ function M.open(buf, win, action)
         target = positions[#positions]
       end
     end
-    if target then
-      api.nvim_win_set_cursor(win, { target.row, target.col })
+    if place_cursor(win, buf, target) then
       apply_focus(target)
     end
   end
@@ -660,17 +679,14 @@ function M.open(buf, win, action)
     end,
   })
 
-  if action_positions[1] then
-    local target = action_positions[1]
-    api.nvim_win_set_cursor(win, { target.row, target.col })
-    apply_focus(target)
+  local target = action_positions[1]
+  if target then
+    if place_cursor(win, buf, target) then
+      apply_focus(target)
+    end
     vim.schedule(function()
-      if api.nvim_win_is_valid(win) and api.nvim_buf_is_valid(buf) then
-        local line_count = api.nvim_buf_line_count(buf)
-        if target.row <= line_count then
-          api.nvim_win_set_cursor(win, { target.row, target.col })
-          apply_focus(target)
-        end
+      if place_cursor(win, buf, target) then
+        apply_focus(target)
       end
     end)
   end
