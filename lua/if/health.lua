@@ -67,6 +67,34 @@ local function check_config()
   end
 end
 
+local function check_statusline()
+  local config = require "if.config"
+  if not config.statusline.enabled then
+    vim.health.info "statusline disabled"
+    return
+  end
+
+  local segments = require "if.ui.statusline.segments"
+  local unknown = {}
+  for _, name in ipairs(config.statusline.order) do
+    if type(name) ~= "string" then
+      unknown[#unknown + 1] = vim.inspect(name)
+    elseif segments[name] == nil and not name:find "^%%" then
+      unknown[#unknown + 1] = name
+    end
+  end
+
+  if #unknown == 0 then
+    vim.health.ok(("statusline.order: %d segments"):format(#config.statusline.order))
+  else
+    vim.health.warn("statusline.order has entries that are not segments: " .. table.concat(unknown, ", "), {
+      "They render as literal text. Segments: mode, filetype, git_branch,",
+      "git_diff, diagnostics, cursor, lsp, cwd, lsp_progress, spacer.",
+      "Raw statusline syntax must start with %, such as %= or %<.",
+    })
+  end
+end
+
 local function check_cache()
   local dir = vim.fn.stdpath "cache" .. "/if.nvim"
   if vim.fn.isdirectory(dir) == 0 then
@@ -132,6 +160,7 @@ function M.check()
   vim.health.start "if.nvim"
   check_version()
   check_config()
+  check_statusline()
   check_cache()
 
   vim.health.start "if.nvim: plugins"

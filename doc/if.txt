@@ -134,7 +134,9 @@ statusline.order                string[]
 <
 An entry that is not a segment is inserted verbatim, so raw 'statusline'
 syntax works too: `"%="` is what `spacer` expands to, and `"%<"` marks
-where truncation starts.
+where truncation starts. A misspelt segment name lands in the statusline
+as literal text for the same reason; |:checkhealth| lists any entry it
+does not recognise.
 
 ------------------------------------------------------------------------------
 4.4 BUFLINE                                                *if-config-bufline*
