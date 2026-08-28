@@ -722,14 +722,6 @@ M.plugins = {
   SnacksPickerGitStatusDeleted = { fg = colors.red },
   SnacksPickerGitStatusUntracked = { fg = colors.orange },
   SnacksPickerPrompt = { fg = colors.blue },
-
-  LemonNormal = { bg = bg },
-  LemonBorder = { fg = colors.float_border, bg = bg },
-  LemonTitle = { fg = colors.blue, bg = bg, bold = true },
-
-  KulalaText = { bg = colors.green, fg = colors.black },
-
-  LemonBeacon = { bg = colors.blue },
 }
 
 function M.apply(highlights)
