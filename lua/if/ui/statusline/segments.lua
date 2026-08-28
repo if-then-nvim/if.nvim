@@ -88,7 +88,7 @@ end
 
 function M.git_branch()
   if not vim.b[statusline_buf()].gitsigns_head or vim.b[statusline_buf()].gitsigns_git_status then
-    return "%="
+    return ""
   end
 
   local git_status = vim.b[statusline_buf()].gitsigns_status_dict
@@ -98,7 +98,7 @@ function M.git_branch()
   local branch_name = git_status.head
 
   if branch_name == nil or branch_name == "" then
-    return "%="
+    return ""
   end
 
   return " " .. icon_hl .. branch_icon .. " " .. text_hl .. branch_name .. " %*"
