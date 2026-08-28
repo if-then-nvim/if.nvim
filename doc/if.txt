@@ -124,14 +124,18 @@ lsp.inlay_hints                 boolean, default false
 statusline.enabled              boolean, default true
 
 statusline.order                string[]
-        Modules from left to right. Use `"%="` for a spacer. Available:
-        `mode`, `filetype`, `lsp`, `lsp_progress`, `git_branch`, `git_diff`,
-        `diagnostics`, `cwd`, `cursor`. >lua
+        Segments from left to right. Available: `mode`, `filetype`, `lsp`,
+        `lsp_progress`, `git_branch`, `git_diff`, `diagnostics`, `cwd`,
+        `cursor`, and `spacer`, which pushes what follows to the right. >lua
 
             M.statusline = {
-              order = { "mode", "filetype", "%=", "diagnostics", "cursor" },
+              order = { "mode", "filetype", "spacer", "diagnostics" },
             }
 <
+An entry that is not a segment is inserted verbatim, so raw 'statusline'
+syntax works too: `"%="` is what `spacer` expands to, and `"%<"` marks
+where truncation starts.
+
 ------------------------------------------------------------------------------
 4.4 BUFLINE                                                *if-config-bufline*
 

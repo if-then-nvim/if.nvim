@@ -234,4 +234,8 @@ function M.lsp_progress()
   return "%#IfLspProgress# " .. content .. " %*"
 end
 
+function M.spacer()
+  return "%="
+end
+
 return M
