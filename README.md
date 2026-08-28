@@ -43,7 +43,7 @@ M.theme = {
 }
 
 M.statusline = {
-  order = { "mode", "filetype", "lsp", "git_branch", "%=", "diagnostics", "cursor" },
+  order = { "mode", "filetype", "lsp", "git_branch", "spacer", "diagnostics" },
 }
 
 M.lsp = { servers = { "gopls", "pyright" } }
