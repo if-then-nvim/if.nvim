@@ -1,10 +1,21 @@
 local M = {}
 local api = vim.api
 local segments = require "if.ui.bufline.segments"
+local explorer = require "if.ui.explorer"
 local mode = require "if.ui.mode"
 local config = require "if.config"
 
 local align = config.bufline and config.bufline.align or "left"
+local PREFIX_TEXT = "  "
+local PREFIX_WIDTH = vim.fn.strwidth(PREFIX_TEXT)
+
+local function explorer_pad(used)
+  local width = explorer.get_explorer_width()
+  if width <= used then
+    return ""
+  end
+  return "%#IfTabFill#" .. string.rep(" ", width - used)
+end
 
 function M.generate()
   local bufs = vim.tbl_filter(api.nvim_buf_is_valid, vim.t.bufs or {})
@@ -31,7 +42,7 @@ function M.generate()
   local tabs = table.concat(tab_parts)
 
   local hl = mode.hl(api.nvim_get_mode().mode)
-  local prefix = "%#" .. hl .. "#  "
+  local prefix = "%#" .. hl .. "#" .. PREFIX_TEXT .. explorer_pad(PREFIX_WIDTH)
 
   if align == "center" then
     return prefix .. "%#IfTabFill#%=" .. buffers .. "%#IfTabFill#%=" .. tabs
