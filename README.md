@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/if-then-nvim/.github/main/assets/logo-dark.svg">
-    <img src="https://raw.githubusercontent.com/if-then-nvim/.github/main/assets/logo.svg" width="200" alt="if">
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/logo-dark.svg">
+    <img src="./assets/logo-light.svg" width="260" alt="if.nvim">
   </picture>
 </p>
 
