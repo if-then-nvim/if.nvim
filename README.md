@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./assets/logo-dark.svg">
-    <img src="./assets/logo-light.svg" width="260" alt="if.nvim">
+    <img src="./assets/logo-light.svg" height="120" alt="if.nvim">
   </picture>
 </p>
 
